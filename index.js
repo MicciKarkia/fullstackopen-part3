@@ -20,11 +20,11 @@ let persons = [
   {
     name: 'Mary Poppendieck',
     number: '39-23-6423122',
-    id: 4,
+    id: 5,
   },
 ]
 
-let d = new Date()
+let d = Date(Date.now())
 
 let amountPersons = persons.length
 
@@ -34,6 +34,19 @@ app.get('/info', (req, res) => {
 
 app.get('/api/persons', (req, res) => {
   res.json(persons)
+})
+
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  console.log('id:', id)
+  const person = persons.find((person) => person.id === id)
+  console.log('person: ', person)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
 })
 
 const PORT = 3001
