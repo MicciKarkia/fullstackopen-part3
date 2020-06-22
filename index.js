@@ -1,7 +1,10 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 
 app.use(express.json())
+
+app.use(morgan('tiny'))
 
 let persons = [
   {
@@ -25,6 +28,16 @@ let persons = [
     id: 5,
   },
 ]
+
+/*const messageLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path: ', request.path)
+  console.log('Body: ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(messageLogger)*/
 
 let d = Date(Date.now())
 
