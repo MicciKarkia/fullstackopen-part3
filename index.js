@@ -53,9 +53,6 @@ app.post('/api/persons', (request, response) => {
   person.save().then((savedPerson) => {
     response.json(savedPerson)
   })
-  //persons = persons.concat(person)
-
-  //res.json(person)
 })
 
 const PORT = process.env.PORT
