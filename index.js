@@ -27,6 +27,16 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch((error) => next(error))
 })
 
+app.get('/info', (request, response) => {
+  let d = new Date(Date.now())
+
+  Person.find({}).then((result) => {
+    response.send(
+      `<p>Phonebook has info for ${result.length} people</p><p>${d}</p>`
+    )
+  })
+})
+
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -116,7 +126,7 @@ let persons = [
   },
 ]
 
-let d = Date(Date.now())
+
 
 let amountPersons = persons.length
 
