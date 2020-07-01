@@ -57,13 +57,22 @@ app.post('/api/persons', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
 
+  console.log('body is: ', body)
+  console.log('request.params.id', request.params.id)
+
   const person = {
     name: body.name,
     number: body.number,
   }
+  console.log('person object:  ', person)
 
-  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+  Person.findByIdAndUpdate(
+    request.params.id,
+    { number: person.number },
+    { runValidators: true, context: 'query', new: true }
+  )
     .then((updatedPerson) => {
+      console.log('Updated person', updatedPerson)
       response.json(updatedPerson)
     })
     .catch((error) => next(error))
