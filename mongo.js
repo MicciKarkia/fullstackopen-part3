@@ -15,10 +15,10 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-const savePerson = (newName, newNumber) => {
+const savePerson = (name, number) => {
   const person = new Person({
-    name: newName,
-    number: newNumber,
+    name,
+    number,
   })
 
   person.save().then((result) => {
@@ -39,7 +39,7 @@ const listAll = () => {
 
 if (process.argv.length < 3) {
   console.log(
-    'Please provide the password as an argument: node mongo.js <password>'
+    'Please provide the password as an argument: node mongo.js <password>',
   )
   process.exit(1)
 } else if (process.argv.length === 3) {

@@ -1,9 +1,10 @@
 const express = require('express')
-const app = express()
-//const morgan = require('morgan')
+// const morgan = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 const Person = require('./models/person')
+
+const app = express()
 
 app.use(cors())
 app.use(express.json())
@@ -28,17 +29,17 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/info', (request, response) => {
-  let d = new Date(Date.now())
+  const d = new Date(Date.now())
 
   Person.find({}).then((result) => {
     response.send(
-      `<p>Phonebook has info for ${result.length} people</p><p>${d}</p>`
+      `<p>Phonebook has info for ${result.length} people</p><p>${d}</p>`,
     )
   })
 })
 
 app.post('/api/persons', (request, response, next) => {
-  const body = request.body
+  const { body } = request
 
   const person = new Person({
     name: body.name,
@@ -58,7 +59,7 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const body = request.body
+  const { body } = request
 
   console.log('body is: ', body)
   console.log('request.params.id', request.params.id)
@@ -72,7 +73,7 @@ app.put('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndUpdate(
     request.params.id,
     { number: person.number },
-    { runValidators: true, context: 'query', new: true }
+    { runValidators: true, context: 'query', new: true },
   )
     .then((updatedPerson) => {
       console.log('Updated person', updatedPerson)
@@ -83,7 +84,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end()
     })
     .catch((error) => next(error))
@@ -100,22 +101,22 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') {
+  }
+  if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
 
-  next(error)
+  return next(error)
 }
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT
+const { PORT } = process.env
 app.listen(PORT, () => {
   console.log(`Server runnig on port ${PORT}`)
 })
 
 /*
-
 
 app.use(express.json())
 
@@ -141,8 +142,6 @@ let persons = [
     id: 5,
   },
 ]
-
-
 
 let amountPersons = persons.length
 
@@ -180,7 +179,5 @@ app.use(
     stream: process.stdout,
   })
 )
-
-
 
 */
